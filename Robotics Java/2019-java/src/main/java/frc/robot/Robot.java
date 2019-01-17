@@ -22,7 +22,6 @@ public class Robot extends IterativeRobot {
 	Movement move;
 	ArmMovement arm;
 
-
 	/* This is the method that runs right as the code runs on the robot.
 	 * This is where we construct our objects
 	 */
@@ -69,6 +68,9 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopInit() {
+		
+		System.out.println("YEETED");
+
 		rotaion.gyroReset();
 		move.resetEncoder();
 	}

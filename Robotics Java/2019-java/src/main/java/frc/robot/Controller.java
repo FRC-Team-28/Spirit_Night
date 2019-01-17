@@ -32,7 +32,9 @@ public class Controller {
 		axisMap.put("forward", Controller1.getY(GenericHID.Hand.kLeft)); 
 		axisMap.put("right", Controller1.getX(GenericHID.Hand.kLeft));
 		axisMap.put("turnRight", Controller1.getTriggerAxis(GenericHID.Hand.kRight) - (Controller1.getTriggerAxis(GenericHID.Hand.kLeft)));
-		
+		buttonMap.put("Zucc", Controller2.getAButton());
+		buttonMap.put("UnZucc", Controller2.getBButton());
+
 	}
 	
 	/* These next methods are used in other classes to get the input values from the controllers
