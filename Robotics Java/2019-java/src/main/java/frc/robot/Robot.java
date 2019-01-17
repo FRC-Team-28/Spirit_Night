@@ -20,7 +20,7 @@ public class Robot extends IterativeRobot {
 	Controller controller1;
 	Rotaion rotaion;
 	Movement move;
-	ArmMovement arm;
+	Limelight lime;
 
 	/* This is the method that runs right as the code runs on the robot.
 	 * This is where we construct our objects
@@ -34,7 +34,7 @@ public class Robot extends IterativeRobot {
 		controller1 = new Controller(); // object for the driver controller
 		rotaion = new Rotaion(); // object for rotaion class
 		move = new Movement(controller1, rotaion); // movement object for drive code
-		
+		lime = new Limelight(move);
 		
 	}
 
@@ -73,6 +73,7 @@ public class Robot extends IterativeRobot {
 
 		rotaion.gyroReset();
 		move.resetEncoder();
+
 	}
 	
 	/* Runs in a loop during teleop
@@ -82,9 +83,10 @@ public class Robot extends IterativeRobot {
 		
 		controller1.update();
 		move.update();
+		if (controller1.getButton("chase")) {
+			lime.chase();
+		}
 		move.display();
-		arm.update();
-		
 		
 	}
 

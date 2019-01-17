@@ -10,64 +10,42 @@ public class Limelight {
 
 	
 	Movement move;
-	PID pid;
+	PID rotationPID;
+	PID leftRightPID;
+	PID distancePID;
+	NetworkTable table;
+	NetworkTableEntry tv;
+	NetworkTableEntry ts;
+	NetworkTableEntry tx;
+	NetworkTableEntry ta;
 	
 	
-	public Limelight(Movement newMovement, PID newPID)
+	public Limelight(Movement newMovement)
 	{
 		move = newMovement;
-		pid = newPID;
+		rotationPID = new PID(0,0,0,0);
+		leftRightPID = new PID(0,0,0,0);
+		distancePID = new PID(0,0,0,10);
+		
+		table = NetworkTableInstance.getDefault().getTable("limelight");
+		tx = table.getEntry("tx");
+		tv = table.getEntry("tv");
+		ta = table.getEntry("ta");
 	}
-	
-	NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-	NetworkTableEntry tx = table.getEntry("tx");
-	NetworkTableEntry ty = table.getEntry("ty");
-	NetworkTableEntry tv = table.getEntry("tv");
-	NetworkTableEntry ta = table.getEntry("ta");
-	
-	
 
-	
-
-	
-	public void display()
+	//This is the method used to chase a target.
+	public void chase()
 	{
-		
-	}
-	
-
-	double left;
-	double right;
-	
-	public void seek()
-	{
-		double v = tv.getDouble(0.0);
-		double x = tx.getDouble(0.0);
-		
-		double kP = 0.0;
-		double kI = 0.0;
-		double kD = 0.0;
-		double setpoint = 0.0;
-		
-		
-		
-		
-
-		double steering_adjust = 0.0f;
-		if (v == 0.0f)
-		{
-		        // We don't see the target, seek for the target by spinning in place at a safe speed.
-		        steering_adjust = 0.3f;
-		}
-		else
-		{
-		        steering_adjust = pid.update(setpoint);
+		if (tv.getDouble(0) == 1){
+			//added this method to movement so that we can use it autonomously more easily
+			move.autonomousUpdate(
+					distancePID.update(ta.getDouble(distancePID.getSetpoint())),
+					leftRightPID.update(tx.getDouble(leftRightPID.getSetpoint())),
+					rotationPID.update(ts.getDouble(rotationPID.getSetpoint()))
+			);
+		} else {
+			move.autonomousUpdate(0, 0, 0.1); //Just spin slowly until we find a target
 		}
 
-		left += steering_adjust;
-		right -= steering_adjust;
 	}
-		
-	
-	
 }

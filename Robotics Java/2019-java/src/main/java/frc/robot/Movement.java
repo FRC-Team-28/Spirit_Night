@@ -16,6 +16,9 @@ public class Movement {
 	private TalonSRX bR = new TalonSRX(PinConstants.BR_MOTOR);
 	private TalonSRX fL = new TalonSRX(PinConstants.FL_MOTOR);
 	private TalonSRX fR = new TalonSRX(PinConstants.FR_MOTOR);
+	private double forwardInput = 0;
+	private double lateralInput = 0;
+	private double rotaionInput = 0;
 	
 	Controller controller;
 	Rotaion rotaion;
@@ -32,7 +35,7 @@ public class Movement {
 	 * set methods set the talon motor controllers to some double
 	 */
 	public double getFrontLeft(){
-		return -1 * (controller.getAxis("forward") - controller.getAxis("right") - rotaion.update(controller.getAxis("turnRight"))); 
+		return -1 * (forwardInput - lateralInput - rotaion.update(rotaionInput)); 
 
 	}
 	
@@ -41,7 +44,7 @@ public class Movement {
 	}
 	
 	public double getFrontRight(){
-		return (controller.getAxis("forward") + controller.getAxis("right") - rotaion.update(controller.getAxis("turnRight"))); 
+		return (forwardInput + lateralInput - rotaion.update(rotaionInput)); 
 	}
 	
 	public void setFrontRight(double speed){
@@ -49,7 +52,7 @@ public class Movement {
 	}
 	
 	public double getBackLeft(){
-		return -1 * (-controller.getAxis("forward") - controller.getAxis("right") - rotaion.update(controller.getAxis("turnRight")));
+		return -1 * (-forwardInput - lateralInput - rotaion.update(rotaionInput));
 	}
 	
 	public void setBackLeft(double speed){
@@ -57,7 +60,7 @@ public class Movement {
 	}
 	
 	public double getBackRight(){
-		return 1 * (controller.getAxis("forward") - controller.getAxis("right") + rotaion.update(controller.getAxis("turnRight")));
+		return 1 * (forwardInput - lateralInput + rotaion.update(rotaionInput));
 	}
 	
 	public void setBackRight(double speed){
@@ -141,14 +144,32 @@ public class Movement {
 	// run during teleop
  	public void update(){
  		
- 		rotaion.reset();
+		 rotaion.reset();
+		 
+		forwardInput = controller.getAxis("forward");
+		lateralInput = controller.getAxis("right");
+		rotaionInput = controller.getAxis("turnRight");
  		
  		this.setFrontRight(this.getFrontRight());
  		this.setFrontLeft(this.getFrontLeft());
  		this.setBackRight(this.getBackRight());
  		this.setBackLeft(this.getBackLeft());	
     	    	
- 	}
+	 }
+	 
+	 public void autonomousUpdate(double forward, double right, double turnRight){
+		 
+		rotaion.reset();
+
+		forwardInput = forward;
+		lateralInput = right;
+		rotaionInput = turnRight;
+ 		
+ 		this.setFrontRight(this.getFrontRight());
+ 		this.setFrontLeft(this.getFrontLeft());
+ 		this.setBackRight(this.getBackRight());
+ 		this.setBackLeft(this.getBackLeft());	
+	 }
  	
  	// run to display encoder values, input values and gyro values
  	public void display()

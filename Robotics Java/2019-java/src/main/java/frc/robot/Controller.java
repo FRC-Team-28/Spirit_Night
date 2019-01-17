@@ -34,6 +34,7 @@ public class Controller {
 		axisMap.put("turnRight", Controller1.getTriggerAxis(GenericHID.Hand.kRight) - (Controller1.getTriggerAxis(GenericHID.Hand.kLeft)));
 		buttonMap.put("Zucc", Controller2.getAButton());
 		buttonMap.put("UnZucc", Controller2.getBButton());
+		buttonMap.put("chase", Controller1.getAButton());
 
 	}
 	
